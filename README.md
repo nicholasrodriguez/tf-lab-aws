@@ -1,2 +1,3 @@
-# terraform-lab-aws
+# Terraform AWS lab
+
 Terraform Lab for AWS Tests
