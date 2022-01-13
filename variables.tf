@@ -1,10 +1,19 @@
-# Variable declarations
 variable "resource_tags" {
   description = "Tags to set for all resources"
   type        = map(string)
   default = {
-    project     = "project-alpha",
+    project     = "my-project",
     environment = "dev"
+  }
+
+  validation {
+    condition     = length(var.resource_tags["project"]) <= 16 && length(regexall("[^a-zA-Z0-9-]", var.resource_tags["project"])) == 0
+    error_message = "The project tag must be no more than 16 characters, and only contain letters, numbers, and hyphens."
+  }
+
+  validation {
+    condition     = length(var.resource_tags["environment"]) <= 8 && length(regexall("[^a-zA-Z0-9-]", var.resource_tags["environment"])) == 0
+    error_message = "The environment tag must be no more than 8 characters, and only contain letters, numbers, and hyphens."
   }
 }
 
@@ -20,7 +29,6 @@ variable "vpc_cidr_block" {
   default     = "10.0.0.0/16"
 }
 
-
 variable "instance_count" {
   description = "Number of instances to provision."
   type        = number
@@ -32,7 +40,6 @@ variable "enable_vpn_gateway" {
   type        = bool
   default     = false
 }
-
 
 variable "public_subnet_count" {
   description = "Number of public subnets."
@@ -74,4 +81,9 @@ variable "private_subnet_cidr_blocks" {
     "10.0.107.0/24",
     "10.0.108.0/24",
   ]
+}
+
+variable "ec2_instance_type" {
+  description = "AWS EC2 instance type."
+  type        = string
 }
